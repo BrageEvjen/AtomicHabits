@@ -4,9 +4,10 @@ export const Stats = () => {
   const habits = useHabitStore((state) => state.habits);
   const isCompletedToday = useHabitStore((state) => state.isCompletedToday);
 
-  const completedToday = habits.filter((h) => isCompletedToday(h.id)).length;
-  const total = habits.length;
-  const percentage = Math.round((completedToday / total) * 100);
+  const dailyHabits = habits.filter((h) => h.frequency === 'daily');
+  const completedToday = dailyHabits.filter((h) => isCompletedToday(h.id)).length;
+  const total = dailyHabits.length;
+  const percentage = total > 0 ? Math.round((completedToday / total) * 100) : 0;
 
   return (
     <div

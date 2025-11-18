@@ -15,6 +15,7 @@ const getInitialState = () => {
         name: 'School',
         description: '1 Pomodoro',
         frequency: 'daily',
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         completedDates: []
       },
       {
@@ -22,6 +23,7 @@ const getInitialState = () => {
         name: 'Career',
         description: '20 minutes',
         frequency: 'daily',
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
         completedDates: []
       },
       {
@@ -29,6 +31,7 @@ const getInitialState = () => {
         name: 'Social',
         description: 'Initiate contact',
         frequency: 'weekly',
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         completedDates: []
       }
     ]
@@ -100,5 +103,43 @@ export const useHabitStore = create((set, get) => ({
       const d = new Date(date);
       return d >= weekAgo && d <= today;
     }).length;
+  },
+
+  addHabit: (name, description, frequency, days) => {
+    set((state) => {
+      const id = name.toLowerCase().replace(/\s+/g, '-');
+      const newHabit = {
+        id,
+        name,
+        description,
+        frequency,
+        days: days || ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        completedDates: []
+      };
+      const updatedHabits = [...state.habits, newHabit];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ habits: updatedHabits }));
+      return { habits: updatedHabits };
+    });
+  },
+
+  deleteHabit: (habitId) => {
+    set((state) => {
+      const updatedHabits = state.habits.filter((h) => h.id !== habitId);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ habits: updatedHabits }));
+      return { habits: updatedHabits };
+    });
+  },
+
+  updateHabit: (habitId, name, description, frequency, days) => {
+    set((state) => {
+      const updatedHabits = state.habits.map((habit) => {
+        if (habit.id === habitId) {
+          return { ...habit, name, description, frequency, days: days || habit.days };
+        }
+        return habit;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ habits: updatedHabits }));
+      return { habits: updatedHabits };
+    });
   }
 }));
