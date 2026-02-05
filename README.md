@@ -14,7 +14,6 @@ A simple, clean habit tracker app built with React and Vite. Track your three co
 
 1. **School**: 1 Pomodoro/day
 2. **Career**: 20 minutes/day
-3. **Social**: Initiate contact 2x/week
 
 ## Setup & Run
 
